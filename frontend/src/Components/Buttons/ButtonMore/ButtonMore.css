@@ -1,0 +1,11 @@
+/* Вернуться к стилизации позже */
+
+.btn-outline-primary {
+    color: #727e86;
+    border-color: #727e86;
+}
+
+.btn-outline-primary:hover {
+    background-color: #727e86;
+    border-color: #727e86;
+}
