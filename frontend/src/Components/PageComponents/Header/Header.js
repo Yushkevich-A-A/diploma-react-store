@@ -2,6 +2,8 @@ import { NavLink, Link } from 'react-router-dom';
 import React from 'react';
 import logo from './img/header-logo.png';
 import './Header.css';
+import HeaderControlsPics from './HeaderControlsPics/HeaderControlsPics';
+import HeaderCart from './HeaderCart/HeaderCart';
 
 function Header(props) {
     const activeStyle = {color: '#ff0000'}
@@ -29,19 +31,9 @@ function Header(props) {
                                 <NavLink to="/contacts" className="nav-link" activeStyle={activeStyle}>Контакты</NavLink>
                             </li>
                         </ul>
-                        <div>
-                            <div className="header-controls-pics">
-                                <div data-id="search-expander" className="header-controls-pic header-controls-search"></div>
-                                {/* { Do programmatic navigation on click to /cart.html } */}
-                                <div className="header-controls-pic header-controls-cart">
-                                    <div className="header-controls-cart-full">1</div>
-                                    <div className="header-controls-cart-menu"></div>
-                                </div>
-                            </div>
-                            <form data-id="search-form" className="header-controls-search-form form-inline invisible">
-                                <input className="form-control" placeholder="Поиск" />
-                            </form>
-                        </div>
+                        <HeaderControlsPics>
+                            <HeaderCart />
+                        </HeaderControlsPics>
                     </div>
                 </nav>
             </div>

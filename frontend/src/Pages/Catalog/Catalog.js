@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 function Catalog(props) {
     return (
         <div>
-            
+            Каталог товаров
         </div>
     )
 }

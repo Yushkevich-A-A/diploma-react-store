@@ -1,6 +1,6 @@
 import React from 'react'
 import TopSales from '../../Components/TopSales/TopSales'
-import ContentAbout from '../../Components/ContentStaticPages/ContentAbout/ContentAbout'
+import ContentAbout from './/ContentAbout/ContentAbout'
 
 function About(props) {
     return (

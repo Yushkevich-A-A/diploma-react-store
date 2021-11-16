@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import banner from './img/banner.jpg';
+import './Banner.css';
 
 function Banner(props) {
     return (

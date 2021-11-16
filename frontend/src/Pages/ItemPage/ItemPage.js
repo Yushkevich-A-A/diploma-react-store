@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 function ItemPage(props) {
     return (
         <div>
-            
+            Здесь указываем товар интересующий
         </div>
     )
 }
