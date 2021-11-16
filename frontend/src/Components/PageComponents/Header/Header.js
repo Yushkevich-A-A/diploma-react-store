@@ -6,7 +6,7 @@ import HeaderControlsPics from './HeaderControlsPics/HeaderControlsPics';
 import HeaderCart from './HeaderCart/HeaderCart';
 
 function Header(props) {
-    const activeStyle = {color: '#ff0000'}
+    // const activeStyle = {color: '#ff0000'}
 
     return (
     <header className="container">
@@ -19,16 +19,16 @@ function Header(props) {
                     <div className="collapase navbar-collapse" id="navbarMain">
                         <ul className="navbar-nav mr-auto">
                             <li className="nav-item">
-                                <NavLink exact to="/" className="nav-link" activeStyle={activeStyle}>Главная</NavLink>
+                                <NavLink exact to="/" className="nav-link" >Главная</NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink to="/catalog" className="nav-link" activeStyle={activeStyle}>Каталог</NavLink>
+                                <NavLink to="/catalog" className="nav-link" >Каталог</NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink to="/about" className="nav-link" activeStyle={activeStyle}>О магазине</NavLink>
+                                <NavLink to="/about" className="nav-link" >О магазине</NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink to="/contacts" className="nav-link" activeStyle={activeStyle}>Контакты</NavLink>
+                                <NavLink to="/contacts" className="nav-link" >Контакты</NavLink>
                             </li>
                         </ul>
                         <HeaderControlsPics>

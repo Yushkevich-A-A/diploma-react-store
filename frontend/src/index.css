@@ -28,6 +28,9 @@ section {
 }
 
 /* Bootstrap */
+.navbar-light .navbar-nav .nav-link.active {
+  color: red;
+}
 
 h2, .h2 {
   margin-bottom: 1.5em;

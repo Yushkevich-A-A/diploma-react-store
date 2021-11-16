@@ -3,7 +3,6 @@ import React from 'react';
 function ContentAbout(props) {
     return (
         <>
-            <h2 className="text-center">О магазине</h2>
             <p>В Интернете можно встретить немало магазинов, предлагающих аксессуары. Но именно к нам хочется
                 возвращаться снова и снова.</p>
             <p className="h4 text-center">Мы предлагаем вам особые условия:</p>

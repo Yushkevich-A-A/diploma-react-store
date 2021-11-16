@@ -4,7 +4,7 @@ import TopSales from '../../Components/TopSales/TopSales'
 
 function Contacts(props) {
     return (
-        <TopSales>
+        <TopSales title={"Контакты"}>
             <ContentContacts />
         </TopSales>
     )

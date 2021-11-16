@@ -1,25 +1,21 @@
 import React from 'react';
-import PropTypes from 'prop-types'
-import './TopSales.css';
+import PropTypes from 'prop-types';
+import './CatalogBlock.css';
 
-function TopSales(props) {
+function CatalogBlock(props) {
     const { title } = props;
 
     return (
-        <section className="top-sales">
+        <section className="catalog">
             <h2 className="text-center">{title}</h2>
             {props.children}
         </section>
     )
 }
 
-TopSales.propTypes = {
+CatalogBlock.propTypes = {
     title: PropTypes.string.isRequired,
 }
 
-export default TopSales
-
-
-
-
+export default CatalogBlock;
 

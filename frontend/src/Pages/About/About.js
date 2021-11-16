@@ -4,7 +4,7 @@ import ContentAbout from './/ContentAbout/ContentAbout'
 
 function About(props) {
     return (
-        <TopSales>
+        <TopSales title={'О магазине'}>
             <ContentAbout />
         </TopSales>
     )

@@ -4,8 +4,11 @@ import './Loader.css';
 
 function Loader(props) {
     return (
-        <div>
-            
+        <div className="preloader">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
     )
 }
