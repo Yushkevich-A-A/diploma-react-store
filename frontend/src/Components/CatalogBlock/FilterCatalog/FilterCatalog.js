@@ -3,15 +3,17 @@ import PropTypes from 'prop-types';
 import './FilterCatalog.css';
 
 function FilterCatalog(props) {
-    const { filter, handleFilter } = props;
-    const filterArr = ['Все', 'Женская обувь', 'Мужская обувь', 'Обувь унисекс', 'Детская обувь',];
+    const { selectedFilter, filterList, handleFilter } = props;
 
     return (
         <ul className="catalog-categories nav justify-content-center">
             {
-                filterArr.map( item => <li key={item} className="nav-item" onClick={() => handleFilter(item) }>
-                                            <a className={`nav-link${filter === item ? ' active' : ''}`} 
-                                            href="#" onClick={(e) => e.preventDefault()}>{item}</a>
+                filterList.map( item => <li key={item.id} className="nav-item">
+                                            <a className={`nav-link${selectedFilter === item.id? ' active' : ''}`} 
+                                            href="#" onClick={(e) => {
+                                                e.preventDefault();
+                                                handleFilter(item.id);
+                                                }}>{item.title}</a>
                                         </li>)
             }
         </ul>

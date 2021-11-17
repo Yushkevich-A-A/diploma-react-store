@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import CatalogBlock from '../../Components/CatalogBlock/CatalogBlock';
 
 function Catalog(props) {
     return (
-        <div>
-            Каталог товаров
-        </div>
+        <CatalogBlock title={'Каталог'} search={true}/>
     )
 }
 

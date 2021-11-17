@@ -8,7 +8,6 @@ import Button from '../../Buttons/Button';
 function Item(props) {
     const { item } = props;
     const [ redirect, setRedirect ] = useState(false);
-    console.log(item)
 
     const handleClick = () => {
         setRedirect(item.id)
@@ -17,8 +16,13 @@ function Item(props) {
     return (
         <div className="col-4">
             <div className="card catalog-item-card">
-                <img src={item.images[0]}
-                    className="card-img-top img-fluid" alt={item.title}/>
+                <div className="block-image-wrapper">
+                    <div className="block-image">
+                        <img src={item.images[0]}
+                        className="card-img-top img-fluid" alt={item.title}/>
+                    </div>
+                </div>
+
                 <div className="card-body">
                     <p className="card-text">{item.title}</p>
                     <p className="card-text">{numberWithSpaces(item.price)} руб.</p>

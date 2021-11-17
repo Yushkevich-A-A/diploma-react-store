@@ -1,0 +1,25 @@
+.col-4 {
+    margin-bottom: 20px;
+}
+
+.block-image-wrapper {
+    position: relative;
+    padding-top: 100%;
+}
+
+.block-image {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.card-img-top.img-fluid {
+    max-height: 100%;
+    max-width: 100%;
+}
