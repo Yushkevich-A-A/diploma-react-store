@@ -25,9 +25,7 @@ function MainPage(props) {
                 {topData.length === 0 && <Loader />}
                 {topData.length !== 0 && <ItemList list={topData} />}
             </TopSales>
-            <CatalogBlock title={'Каталог'}>
-                {catalog.length === 0 && <Loader />}
-            </CatalogBlock>
+            <CatalogBlock title={'Каталог'} search={true}/>
         </>
     )
 }
