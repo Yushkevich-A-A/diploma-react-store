@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { numberWithSpaces } from '../../../functions/numberWithSpaces';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import Button from '../../Button/Button';
+import noPhoto from '../../../assets/no_photo/no_photo.png';
 import './Item.css';
-import Button from '../../Buttons/Button';
 
 function Item(props) {
     const { item } = props;
@@ -18,7 +19,7 @@ function Item(props) {
             <div className="card catalog-item-card">
                 <div className="block-image-wrapper">
                     <div className="block-image">
-                        <img src={item.images[0]}
+                        <img src={item.images[0]} onError={(e)=>{e.target.onerror = null; e.target.src=noPhoto}}
                         className="card-img-top img-fluid" alt={item.title}/>
                     </div>
                 </div>

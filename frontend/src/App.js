@@ -12,6 +12,10 @@ import Catalog from './Pages/Catalog/Catalog';
 import ItemPage from './Pages/ItemPage/ItemPage';
 
 function App() {
+  if (!localStorage.getItem('cart')) {
+    localStorage.setItem('cart', JSON.stringify([]));
+  }
+
   return (
     <div className="App">
       <Router>

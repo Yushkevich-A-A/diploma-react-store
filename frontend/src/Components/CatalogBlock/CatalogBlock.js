@@ -4,7 +4,7 @@ import FilterCatalog from './FilterCatalog/FilterCatalog';
 import './CatalogBlock.css';
 import Loader from '../Loader/Loader';
 import ItemList from '../ItemList/ItemList';
-import Button from '../Buttons/Button';
+import Button from '../Button/Button';
 
 
 function CatalogBlock(props) {
