@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 function ContentContacts() {
     return (
@@ -11,5 +11,5 @@ function ContentContacts() {
     )
 }
 
-export default ContentContacts
+export default ContentContacts;
 

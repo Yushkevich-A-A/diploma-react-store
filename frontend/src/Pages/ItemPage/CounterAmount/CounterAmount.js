@@ -38,7 +38,8 @@ function CounterAmount(props) {
 }
 
 CounterAmount.propTypes = {
-
+    initCount: PropTypes.number.isRequired,
+    handleChangeCount: PropTypes.func.isRequired,
 }
 
 export default CounterAmount

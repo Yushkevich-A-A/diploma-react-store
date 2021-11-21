@@ -1,16 +1,11 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
 
-function Search(props) {
+function Search() {
     return (
         <form data-id="search-form" className="header-controls-search-form form-inline invisible">
             <input className="form-control" placeholder="Поиск" />
         </form>
     )
-}
-
-Search.propTypes = {
-
 }
 
 export default Search

@@ -37,7 +37,7 @@ function ItemTable(props) {
 }
 
 ItemTable.propTypes = {
-
+    item: PropTypes.object.isRequired,
 }
 
 export default ItemTable

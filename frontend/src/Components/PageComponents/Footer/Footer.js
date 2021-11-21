@@ -5,7 +5,7 @@ import FooterContacts from './FooterContacts/FooterContacts';
 import FooterInfo from './FooterInfo/FooterInfo';
 import Payments from './Payments/Payments';
 
-function Footer(props) {
+function Footer() {
     return (
         <footer className="container bg-light footer">
             <div className="row">

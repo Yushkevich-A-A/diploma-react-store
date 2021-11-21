@@ -29,5 +29,5 @@ function ContentAbout(props) {
     )
 }
 
-export default ContentAbout
+export default ContentAbout;
 

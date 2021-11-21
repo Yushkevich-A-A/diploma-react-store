@@ -1,7 +1,7 @@
 import React from 'react';
 import TopSales from '../../Components/TopSales/TopSales';
 
-function Page404(props) {
+function Page404() {
     return (
         <TopSales title={'Страница не найдена'}>
             <p>Извините, такая страница не найдена!</p>

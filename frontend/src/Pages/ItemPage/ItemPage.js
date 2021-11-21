@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useEffect, useState  } from 'react';
+import { Redirect } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import Loader from '../../Components/Loader/Loader';
-import './ItemPage.css';
-import noPhoto from '../../assets/no_photo/no_photo.png'
+import noPhoto from '../../assets/no_photo/no_photo.png';
 import ButtonAddToCart from '../../Components/ButtonAddToCart/ButtonAddToCart';
 import ItemTable from './ItemTable/ItemTable';
 import CounterAmount from './CounterAmount/CounterAmount';
 import AvalibleSizes from './AvalibleSizes/AvalibleSizes';
+import { addItemToCart } from '../../reduxFolder/actions/actions';
+import './ItemPage.css';
 
 function ItemPage(props) {
     const { match } = props;
@@ -15,19 +17,19 @@ function ItemPage(props) {
     const [ avaliable, setAvaliable ] = useState(true);
     const [ userSelect,  setUserSelect ] = useState({count: 1, size: null, id: null, price: null, title: null});
     const [ isRedirect, setRedirect ] = useState(false);
+    const [ loading, setLoading ] = useState(false)
+    const dispatch = useDispatch();
 
-    console.log(itemData);
-
-    useEffect( () => {
+    useEffect(() => {
+        setLoading(true);
         fetch(`${process.env.REACT_APP_SERVER_URL}/api/items/${match.params.id}`)
             .then( resp => resp.json() )
             .then( data => {
+                setLoading(false);
                 if (data.sizes.filter( item => item.avalible).length === 0) {
                     setAvaliable(false);
                 }
-                const id = data.id;
-                const price = data.price;
-                const title = data.title;
+                const { id, price, title } = data;
                 setUserSelect(prevState => ({...prevState, id, price, title}))
                 setItemData(data);
             });
@@ -42,23 +44,14 @@ function ItemPage(props) {
     }
 
     const handleAddToCart = () => {
-        const valueInLocalstorage = JSON.parse(localStorage.getItem('cart'));
-        console.log(userSelect);
-        const indexExistOrder = valueInLocalstorage.findIndex( item => item.id === userSelect.id && item.size === userSelect.size);
-        if (indexExistOrder === -1) {
-            valueInLocalstorage.push(userSelect);
-        } else {
-            valueInLocalstorage[indexExistOrder].count += userSelect.count;
-        }
-        localStorage.setItem('cart', JSON.stringify(valueInLocalstorage));
-        setRedirect(true)
+        dispatch(addItemToCart(userSelect))
+        setRedirect(true);
     }
  
     return (
         <>
-            {!itemData && <Loader />}
+            {loading && <Loader />}
             {itemData && <section className="catalog-item">
-                {console.log(itemData)}
                 <h2 className="text-center">{itemData.title}</h2>
                 <div className="row">
                     <div className="col-5">
@@ -74,13 +67,14 @@ function ItemPage(props) {
                        {avaliable && userSelect.size && <ButtonAddToCart handleClick={handleAddToCart}/>}
                     </div>
                 </div>
+                {isRedirect && <Redirect to='/cart'/>}
             </section>}
         </>
     )
 }
 
 ItemPage.propTypes = {
-
+    match: PropTypes.object.isRequired,
 }
 
 export default ItemPage

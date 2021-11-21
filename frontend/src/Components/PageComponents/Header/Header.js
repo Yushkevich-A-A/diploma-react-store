@@ -6,7 +6,6 @@ import HeaderControlsPics from './HeaderControlsPics/HeaderControlsPics';
 import HeaderCart from './HeaderCart/HeaderCart';
 
 function Header(props) {
-    // const activeStyle = {color: '#ff0000'}
 
     return (
     <header className="container">

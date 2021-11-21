@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import './HeaderCart.css';
 
-function HeaderCart(props) {
+function HeaderCart() {
+    const { items } = useSelector( state => state.manageCart );
+    // useEffect(() => {
+    //     console.log('длина текущего массива ' + items.length)
+    // }, [items])
 
-    const arrItemsInCart = JSON.parse(localStorage.getItem('cart')).length;
-    console.log(arrItemsInCart)
 
     return (
         <Link to='/cart'>
             <div className="header-controls-pic header-controls-cart">
-                { !!arrItemsInCart &&  <div className="header-controls-cart-full">{arrItemsInCart}</div> }
+                { items.length !== 0 &&  <div className="header-controls-cart-full">{items.length}</div> }
                 <div className="header-controls-cart-menu"></div>
             </div>
         </Link>

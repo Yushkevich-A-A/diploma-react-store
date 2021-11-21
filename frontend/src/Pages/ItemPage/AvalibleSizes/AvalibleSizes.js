@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 
 function AvalibleSizes(props) {
     const { list, selectedSize, handleSelectSize } = props;
-    console.log(selectedSize);
-
 
     return (
         <p>Размеры в наличии: 
@@ -19,8 +17,10 @@ function AvalibleSizes(props) {
 }
 
 AvalibleSizes.propTypes = {
-
+    list: PropTypes.array.isRequired,
+    selectedSize: PropTypes.string,
+    handleSelectSize: PropTypes.func.isRequired,
 }
 
-export default AvalibleSizes
+export default AvalibleSizes;
 

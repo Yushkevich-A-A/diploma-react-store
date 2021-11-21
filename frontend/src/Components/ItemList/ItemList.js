@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import ItemPage from '../../Pages/ItemPage/ItemPage';
 import Item from './Item/Item';
 
 function ItemList(props) {
@@ -16,7 +15,7 @@ function ItemList(props) {
 }
 
 ItemList.propTypes = {
-
+    list: PropTypes.array.isRequired,
 }
 
 export default ItemList

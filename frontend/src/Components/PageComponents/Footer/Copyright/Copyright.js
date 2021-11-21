@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import './Copyright.css';
 
 function Copyright(props) {
@@ -10,10 +9,6 @@ function Copyright(props) {
         </section>
     )
 }
-
-Copyright.propTypes = {
-
-};
 
 export default Copyright;
 

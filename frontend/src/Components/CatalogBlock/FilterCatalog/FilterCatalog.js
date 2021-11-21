@@ -10,7 +10,7 @@ function FilterCatalog(props) {
             {
                 filterList.map( item => <li key={item.id} className="nav-item">
                                             <a className={`nav-link${selectedFilter === item.id? ' active' : ''}`} 
-                                            href="#" onClick={(e) => {
+                                            href="#0" onClick={(e) => {
                                                 e.preventDefault();
                                                 handleFilter(item.id);
                                                 }}>{item.title}</a>
@@ -21,7 +21,9 @@ function FilterCatalog(props) {
 }
 
 FilterCatalog.propTypes = {
-
+    selectedFilter: PropTypes.number.isRequired,
+    filterList: PropTypes.array.isRequired,
+    handleFilter: PropTypes.func.isRequired,
 };
 
 export default FilterCatalog;

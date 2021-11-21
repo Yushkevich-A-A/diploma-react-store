@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
 
 function FooterInfo(props) {
     return (
@@ -19,10 +18,6 @@ function FooterInfo(props) {
             </ul>
         </section>
     )
-}
-
-FooterInfo.propTypes = {
-
 }
 
 export default FooterInfo

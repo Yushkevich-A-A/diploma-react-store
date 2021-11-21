@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import './Payments.css';
 
 function Payment(props) {
@@ -17,10 +16,6 @@ function Payment(props) {
         </section>
     )
 }
-
-Payment.propTypes = {
-
-};
 
 export default Payment;
 

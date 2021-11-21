@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import './Loader.css';
 
 function Loader(props) {
@@ -11,10 +10,6 @@ function Loader(props) {
             <span></span>
         </div>
     )
-}
-
-Loader.propTypes = {
-
 }
 
 export default Loader

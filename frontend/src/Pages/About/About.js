@@ -10,9 +10,5 @@ function About(props) {
     )
 }
 
-About.propTypes = {
-
-}
-
 export default About
 

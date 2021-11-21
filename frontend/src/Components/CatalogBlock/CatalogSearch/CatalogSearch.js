@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 function CatalogSearch(props) {
     return (
         <div>
-            
+            Gjbcr
         </div>
     )
 }

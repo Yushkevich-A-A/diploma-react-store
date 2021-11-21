@@ -10,7 +10,7 @@ function ButtonAddToCart(props) {
 }
 
 ButtonAddToCart.propTypes = {
-
+    handleClick: PropTypes.func.isRequired,
 }
 
 export default ButtonAddToCart

@@ -4,7 +4,7 @@ import ItemList from '../../Components/ItemList/ItemList';
 import Loader from '../../Components/Loader/Loader';
 import TopSales from '../../Components/TopSales/TopSales';
 
-function MainPage(props) {
+function MainPage() {
     const [ topData, setTopData] = useState([]);
 
     useEffect(() => {

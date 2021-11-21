@@ -9,12 +9,12 @@ import Button from '../Button/Button';
 
 function CatalogBlock(props) {
      
-    const { title, search } = props;
+    const { title } = props;
     const [ filters, setFilters ] = useState([{id: 0, title: 'Все',}]);
     const [ selectedFilter, setSelectedFilter ] = useState(0);
     const [ catalog, setCatalog ] = useState([]);
     const [ permissioLoading, setPermissionLoading ] = useState(true);
-    // const [ search, setSearch ] = useState('');
+    // const [ search, setSearch ] = useState(''); в стадии разработки
 
     const handleFilter = (id) => {
         setSelectedFilter(filters.find( item => item.id === id ).id)

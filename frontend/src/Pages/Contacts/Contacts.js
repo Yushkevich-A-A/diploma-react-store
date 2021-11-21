@@ -10,9 +10,5 @@ function Contacts(props) {
     )
 }
 
-Contacts.propTypes = {
-
-}
-
 export default Contacts
 
