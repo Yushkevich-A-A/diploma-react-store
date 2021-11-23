@@ -5,10 +5,10 @@ import './HeaderCart.css';
 
 function HeaderCart() {
     const { items } = useSelector( state => state.manageCart );
-    // useEffect(() => {
-    //     console.log('длина текущего массива ' + items.length)
-    // }, [items])
 
+    useEffect(() => {
+        localStorage.setItem('cart', JSON.stringify(items));
+    }, [items])
 
     return (
         <Link to='/cart'>

@@ -17,8 +17,6 @@ function FormOrder(props) {
         sentData({...form})
     }
 
-
-
     return (
         <section className="order">
             <h2 className="text-center">Оформить заказ</h2>
@@ -26,32 +24,22 @@ function FormOrder(props) {
                 <form className="card-body" onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="phone">Телефон</label>
-                        <input type="tel" 
-                                className="form-control" 
-                                name='phone'
-                                id="phone" 
-                                value={form.phone}
-                                onChange={handleChange}
-                                placeholder="Ваш телефон" 
-                                required/>
+                        <input type="tel" className="form-control"
+                                name='phone' id="phone" 
+                                value={form.phone} onChange={handleChange}
+                                placeholder="Ваш телефон" required/>
                     </div>
                     <div className="form-group">
                         <label htmlFor="address">Адрес доставки</label>
-                        <input className="form-control" 
-                                name='address'
-                                id="address" 
-                                value={form.address}
-                                onChange={handleChange}
-                                placeholder="Адрес доставки" 
+                        <input className="form-control" name='address'
+                                id="address" value={form.address}
+                                onChange={handleChange} placeholder="Адрес доставки" 
                                 required/>
                     </div>
                     <div className="form-group form-check">
-                        <input type="checkbox" 
-                                className="form-check-input" 
-                                name='agreement'
-                                id="agreement" 
-                                checked={form.agreement} 
-                                onChange={handleChange} 
+                        <input type="checkbox" className="form-check-input" 
+                                name='agreement' id="agreement" 
+                                checked={form.agreement} onChange={handleChange} 
                                 required/>
                         <label className="form-check-label" htmlFor="agreement">Согласен с правилами доставки</label>
                     </div>

@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from 'react';
+import { Redirect } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
 import FormOrder from './FormOrder/FormOrder';
 import CartList from './CartList/CartList';
-import { numberWithSpaces } from '../../functions/numberWithSpaces';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchDataToServer, removeItemFromCart } from '../../reduxFolder/actions/actions';
+import Loader from '../../Components/Loader/Loader'
+import { fetchDataToServer, removeItemFromCart, resetData } from '../../reduxFolder/actions/actionsCart/actionsCart';
+import CartTable from './CartTable/CartTable';
+
 
 function Cart(props) {
-    const { items } = useSelector( state => state.manageCart );
-    const dispatch = useDispatch()
+    const { items, loading, error } = useSelector( state => state.manageCart );
+    const dispatch = useDispatch();
+    const [ redirect, setRedirect ] = useState(false);
+    const [ success, setSuccess ] = useState(false);
 
     const abortingController = new AbortController();
 
     useEffect(() => {
-        console.log(abortingController)
-        return () => {
-            abortingController.abort();
-            console.log(abortingController);
-            console.log('произошел аборсиге');
-        };
+        return () => { abortingController.abort() };
+        // eslint-disable-next-line
     }, [])
 
     const handleDeleteOrder = (id) => {
@@ -25,39 +26,28 @@ function Cart(props) {
     }
 
     const sentData = (formData) => {
-        dispatch(fetchDataToServer(formData, abortingController));
-    }
-
-    const getAmountSum = () => {
-        return numberWithSpaces(items.reduce( (acc, sum) => sum.price * sum.count + acc, 0));
+        dispatch(fetchDataToServer(formData, () => {
+            setSuccess(true);
+            setTimeout(() => {
+                dispatch(resetData());
+                setRedirect(true);
+            }, 5000)
+        } , abortingController));
     }
 
     return (
         <>
-        <section className="cart">
-            <h2 className="text-center">Корзина</h2>
-            <table className="table table-bordered">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Название</th>
-                        <th scope="col">Размер</th>
-                        <th scope="col">Кол-во</th>
-                        <th scope="col">Стоимость</th>
-                        <th scope="col">Итого</th>
-                        <th scope="col">Действия</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <section className="cart">
+                <h2 className="text-center">Корзина</h2>
+                <CartTable items={items}>
                     <CartList list={items} handleDeleteOrder={handleDeleteOrder} />
-                    <tr>
-                        <td colSpan="5" className="text-right">Общая стоимость</td>
-                        <td>{getAmountSum()} руб.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-        { items.length !== 0 && <FormOrder sentData={sentData}/>}
+                </CartTable>
+            </section>
+            {loading && <Loader />}
+            {success &&  console.log('показываем сообщение об успехе')}
+            {error && console.log(error)}
+            { items.length !== 0 && <FormOrder sentData={sentData}/>}
+            {redirect && <Redirect to='/' />}
         </>
     )
 }

@@ -8,6 +8,7 @@ function CounterAmount(props) {
 
     useEffect( () => {
         handleChangeCount(count);
+        // eslint-disable-next-line
     }, [count]);
 
     const inkCount = () => {
@@ -24,16 +25,14 @@ function CounterAmount(props) {
         setCount(count - 1);
     }
 
-
-
-
     return (
-        <p>Количество: <span className="btn-group btn-group-sm pl-2">
-            <button className="btn btn-secondary" onClick={decCount}>-</button>
-            <span className="btn btn-outline-primary">{count}</span>
-            <button className="btn btn-secondary" onClick={inkCount}>+</button>
-        </span>
-</p>
+        <p>Количество: 
+            <span className="btn-group btn-group-sm pl-2">
+                <button className="btn btn-secondary" onClick={decCount}>-</button>
+                <span className="btn btn-outline-primary">{count}</span>
+                <button className="btn btn-secondary" onClick={inkCount}>+</button>
+            </span>
+        </p>
     )
 }
 

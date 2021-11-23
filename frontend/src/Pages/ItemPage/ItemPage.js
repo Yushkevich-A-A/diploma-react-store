@@ -1,38 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../../Components/Loader/Loader';
 import noPhoto from '../../assets/no_photo/no_photo.png';
 import ButtonAddToCart from '../../Components/ButtonAddToCart/ButtonAddToCart';
 import ItemTable from './ItemTable/ItemTable';
 import CounterAmount from './CounterAmount/CounterAmount';
 import AvalibleSizes from './AvalibleSizes/AvalibleSizes';
-import { addItemToCart } from '../../reduxFolder/actions/actions';
+import { addItemToCart} from '../../reduxFolder/actions/actionsCart/actionsCart';
+import { fetchingItemData, resetStoreItem } from '../../reduxFolder/actions/actionsItem/actionsItem';
 import './ItemPage.css';
 
 function ItemPage(props) {
     const { match } = props;
+    const { loading, error, avaliable } = useSelector( store => store.loadingItem )
+    const dispatch = useDispatch();
     const [ itemData, setItemData ] = useState(null);
-    const [ avaliable, setAvaliable ] = useState(true);
     const [ userSelect,  setUserSelect ] = useState({count: 1, size: null, id: null, price: null, title: null});
     const [ isRedirect, setRedirect ] = useState(false);
-    const [ loading, setLoading ] = useState(false)
-    const dispatch = useDispatch();
+    const abortingController = new AbortController();
 
     useEffect(() => {
-        setLoading(true);
-        fetch(`${process.env.REACT_APP_SERVER_URL}/api/items/${match.params.id}`)
-            .then( resp => resp.json() )
-            .then( data => {
-                setLoading(false);
-                if (data.sizes.filter( item => item.avalible).length === 0) {
-                    setAvaliable(false);
-                }
-                const { id, price, title } = data;
-                setUserSelect(prevState => ({...prevState, id, price, title}))
-                setItemData(data);
-            });
+        dispatch( fetchingItemData(match.params.id, (data) => {
+            const { id, price, title } = data;
+            setUserSelect(prevState => ({...prevState, id, price, title}))
+            setItemData(data);
+        }, abortingController) )
+        return () => {
+            abortingController.abort();
+            dispatch(resetStoreItem());
+        }
+        // eslint-disable-next-line
     }, []);
 
     const handleSelectSize = (size) => {
@@ -51,6 +50,7 @@ function ItemPage(props) {
     return (
         <>
             {loading && <Loader />}
+            { error && <p>{error}</p> }
             {itemData && <section className="catalog-item">
                 <h2 className="text-center">{itemData.title}</h2>
                 <div className="row">
@@ -75,7 +75,7 @@ function ItemPage(props) {
 
 ItemPage.propTypes = {
     match: PropTypes.object.isRequired,
-}
+};
 
-export default ItemPage
+export default ItemPage;
 

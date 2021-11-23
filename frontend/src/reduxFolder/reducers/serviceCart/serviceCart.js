@@ -21,12 +21,10 @@ function serviceManageCart ( state = initStateCart, action ) {
             } else {
                 newItems[indexExistOrder].count += userSelect.count;
             }
-            localStorage.setItem('cart', JSON.stringify(newItems));
             return {...state, items: newItems};
         case 'REMOVE_ITEM_FROM_CART': 
             const { orderId } = action.payload;
             const newItems1 = state.items.filter( item => item.orderId !== orderId);
-            localStorage.setItem('cart', JSON.stringify(newItems1));
             return {...state, items: newItems1};
         case 'SEND_DATA_TO_SERVER': 
             return {...state, loading: true, error: null};
@@ -36,7 +34,6 @@ function serviceManageCart ( state = initStateCart, action ) {
         case 'SUCCESS_SEND_DATA':
             return {...state, loading: false, error: null};
         case 'RESET_DATA':
-            localStorage.setItem('cart', JSON.stringify([]));
             return {...initStateCart, items: []};
         default:
             return state;

@@ -1,22 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { addSearchRequest } from '../../../../reduxFolder/actions/actionsCatalog/actionsCatalog';
 import './HeaderControlsPics.css';
 
 function HeaderControlsPics(props) {
+    const { headerSearching } = useSelector( state => state.catalog);
+    const dispatch = useDispatch();
     const [ redirect, setRedirect ] = useState(false);
     const [ visiableSearch, setVisiableSearch ] = useState(false);
     const [ value, setValue ] = useState('');
+
+    useEffect(() => {
+        if (visiableSearch) {
+            setVisiableSearch(false);
+        }
+        // eslint-disable-next-line
+    }, [headerSearching])
 
     const handleChange = (e) => {
         setValue(e.target.value);
     }
 
     const handleClick = () => {
-        setRedirect(false);
+        if (!headerSearching) {
+            return;
+        }
         setVisiableSearch(prevState => !prevState);
         if ( value.trim() !== '' ) {
-            // ////////////////////////////////////////
-            console.log('Отправляем данные в диспатч');
+            dispatch(addSearchRequest(value))
             setValue('');
             setRedirect(true);
         }
@@ -27,6 +39,7 @@ function HeaderControlsPics(props) {
         if ( value.trim() === '' ) {
             return;
         }
+        dispatch(addSearchRequest(value))
         setVisiableSearch(false);
         setValue('');
         setRedirect(true);

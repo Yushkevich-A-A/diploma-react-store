@@ -1,6 +1,7 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
+import PropTypes from 'prop-types';
 import Item from './Item/Item';
+import './ItemList.css';
 
 function ItemList(props) {
     const { list } = props;
@@ -18,5 +19,5 @@ ItemList.propTypes = {
     list: PropTypes.array.isRequired,
 }
 
-export default ItemList
+export default ItemList;
 
