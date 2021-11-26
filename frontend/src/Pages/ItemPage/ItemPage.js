@@ -23,7 +23,7 @@ function ItemPage(props) {
     const abortingController = new AbortController();
 
     useEffect(() => {
-        fetchData()
+        fetchData();
         return () => {
             abortingController.abort();
             dispatch(resetStoreItem());

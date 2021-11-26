@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import FilterCatalog from './FilterCatalog/FilterCatalog';
 import Loader from '../../Components/Loaders/Loader/Loader';
 import ItemList from '../../Components/ItemList/ItemList';
 import Button from '../../Components/Buttons/Button/Button';
 import './Catalog.css';
-import { useDispatch, useSelector } from 'react-redux';
 import { dismissHeaderSearch, fetchCatalog, fetchFilters, resetFullCatalog, resetStateCatalogWithoutSearch } from '../../reduxFolder/actions/actionsCatalog/actionsCatalog';
 import CatalogSearch from './CatalogSearch/CatalogSearch';
 import ErrorLoading from '../../Components/ErrorLoading/ErrorLoading';
+import EmptySearch from '../../Components/EmptySearch/EmptySearch';
 
 function Catalog(props) {
     const { searching } = props;
@@ -16,6 +17,7 @@ function Catalog(props) {
     const dispatch = useDispatch();
     const [ selectedFilter, setSelectedFilter ] = useState(0);
     const [ catalog, setCatalog ] = useState([]);
+    const [ isEmptySearch, setEmptySearch ] = useState(false)
     const globalAbortingController = new AbortController();
 
     const handleFilter = (id) => {
@@ -40,16 +42,28 @@ function Catalog(props) {
 
     useEffect(() => {
         const abortingController = new AbortController();
-        loadingCatalog(0, (data) => setCatalog([...data]), abortingController);
+        setEmptySearch(false);
+        loadingCatalog(0, (data) => {
+            if (data.length === 0) {
+                setEmptySearch(true);
+            }
+            setCatalog([...data])
+        }, abortingController);
         return () => {
             abortingController.abort();
-            setCatalog([])
+            setCatalog([]);
         }
         // eslint-disable-next-line
     }, [selectedFilter, search]);
 
     const handleAddLoading = () => {
-        loadingCatalog(catalog.length, (data) => setCatalog(prevState => ([...prevState, ...data])), globalAbortingController);
+        setEmptySearch(false);
+        loadingCatalog(catalog.length, (data) => {
+            if (data.length === 0 && catalog.length === 0) {
+                setEmptySearch(true);
+            }
+            setCatalog(prevState => ([...prevState, ...data]))
+        }, globalAbortingController);
     }
 
     const loadingFilter = () => {
@@ -62,9 +76,7 @@ function Catalog(props) {
             offset,
             search: search,
         }
-        dispatch(fetchCatalog(fetchParams, (data) => {
-            handler(data);
-        }, aborting));
+        dispatch(fetchCatalog(fetchParams, (data) => handler(data), aborting));
     }
 
     return (
@@ -75,8 +87,8 @@ function Catalog(props) {
                 selectedFilter={selectedFilter} 
                 handleFilter={handleFilter}
                 loading={loadingFilters}/>
-            {/* { error && <p>{error}</p>  }   */}
             <ItemList list={catalog} />
+            { searching && isEmptySearch && <EmptySearch />}
             { permissioLoading && <Button name={'Загрузить еще'} handleClick={handleAddLoading} /> }
             { loading && <Loader /> }
             { error && <ErrorLoading error={error} handlerRepeatRequest={handleAddLoading} /> } 

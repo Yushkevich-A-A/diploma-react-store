@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
+import { CSSTransition } from 'react-transition-group';
 import FormOrder from './FormOrder/FormOrder';
 import CartList from './CartList/CartList';
 import Loader from '../../Components/Loaders/Loader/Loader';
 import { fetchDataToServer, removeItemFromCart, resetData } from '../../reduxFolder/actions/actionsCart/actionsCart';
 import CartTable from './CartTable/CartTable';
 import MessageSuccess from '../../Components/MessageSuccess/MessageSuccess';
+import './Cart.css';
 
 function Cart(props) {
     const { items, loading, error } = useSelector( state => state.manageCart );
@@ -28,6 +30,7 @@ function Cart(props) {
     const sentData = (formData) => {
         dispatch(fetchDataToServer(formData, () => {
             setSuccess(true);
+            dispatch(resetData());
             setTimeout(() => {
                 dispatch(resetData());
                 setRedirect(true);
@@ -37,7 +40,11 @@ function Cart(props) {
 
     return (
         <>
-            {success &&  <MessageSuccess />}
+            {
+            <CSSTransition in={success} classNames='success-block' timeout={300} unmountOnExit>
+               <MessageSuccess /> 
+            </CSSTransition>
+            }
             <section className="cart">
                 <h2 className="text-center">Корзина</h2>
                 <CartTable items={items}>
