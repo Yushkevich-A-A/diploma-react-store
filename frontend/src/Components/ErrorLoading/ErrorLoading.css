@@ -1,0 +1,21 @@
+.loading-error-wrapper {
+    padding: 10px;;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading-error {
+    padding: 10px 20px;
+    border: 2px solid rgb(255, 0, 0);
+    color: red;
+    /* color: white; */
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+}
+
+.error-text {
+    margin: 5px;
+}

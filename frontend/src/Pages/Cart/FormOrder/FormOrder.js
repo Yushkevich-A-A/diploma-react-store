@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 function FormOrder(props) {
-    const { sentData } = props;
+    const { sentData, error } = props;
 
     const [ form, setForm ] = useState({phone: '', address: '', agreement: false})
 
@@ -43,7 +43,9 @@ function FormOrder(props) {
                                 required/>
                         <label className="form-check-label" htmlFor="agreement">Согласен с правилами доставки</label>
                     </div>
-                    <button type="submit" className="btn btn-outline-secondary">Оформить</button>
+                    <button type="submit" className="btn btn-outline-secondary">{
+                        `${error ? 'повторить отправку' : "Оформить"}`
+                    }</button>
                 </form>
 
             </div>

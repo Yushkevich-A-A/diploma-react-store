@@ -1,6 +1,7 @@
 .catalog-categories {
     font-size: 1.3rem;
     margin-bottom: 2em;
+    align-items: center;
   }
 
   .nav-link.active {

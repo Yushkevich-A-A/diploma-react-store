@@ -7,7 +7,7 @@ const initStateItem = {
 function serviceLoadingItem ( state = initStateItem, action ) {
     switch(action.type) {
         case 'LOADING_ITEM':
-            return {...state, loading: true};
+            return {...state, loading: true, error: null};
         case 'ERROR_LOADING_ITEM': 
             const { message } = action.payload;
             return {...state, loading: false, error: message};

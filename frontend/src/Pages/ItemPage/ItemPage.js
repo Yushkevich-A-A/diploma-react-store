@@ -2,15 +2,16 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import Loader from '../../Components/Loader/Loader';
+import Loader from '../../Components/Loaders/Loader/Loader';
 import noPhoto from '../../assets/no_photo/no_photo.png';
-import ButtonAddToCart from '../../Components/ButtonAddToCart/ButtonAddToCart';
+import ButtonAddToCart from '../../Components/Buttons/ButtonAddToCart/ButtonAddToCart';
 import ItemTable from './ItemTable/ItemTable';
 import CounterAmount from './CounterAmount/CounterAmount';
 import AvalibleSizes from './AvalibleSizes/AvalibleSizes';
 import { addItemToCart} from '../../reduxFolder/actions/actionsCart/actionsCart';
 import { fetchingItemData, resetStoreItem } from '../../reduxFolder/actions/actionsItem/actionsItem';
 import './ItemPage.css';
+import ErrorLoading from '../../Components/ErrorLoading/ErrorLoading';
 
 function ItemPage(props) {
     const { match } = props;
@@ -22,17 +23,21 @@ function ItemPage(props) {
     const abortingController = new AbortController();
 
     useEffect(() => {
-        dispatch( fetchingItemData(match.params.id, (data) => {
-            const { id, price, title } = data;
-            setUserSelect(prevState => ({...prevState, id, price, title}))
-            setItemData(data);
-        }, abortingController) )
+        fetchData()
         return () => {
             abortingController.abort();
             dispatch(resetStoreItem());
         }
         // eslint-disable-next-line
     }, []);
+
+    const fetchData = () => {
+        dispatch( fetchingItemData(match.params.id, (data) => {
+            const { id, price, title } = data;
+            setUserSelect(prevState => ({...prevState, id, price, title}))
+            setItemData(data);
+        }, abortingController) )
+    }
 
     const handleSelectSize = (size) => {
         setUserSelect( prevState => ({...prevState, size}))
@@ -50,7 +55,7 @@ function ItemPage(props) {
     return (
         <>
             {loading && <Loader />}
-            { error && <p>{error}</p> }
+            { error && <ErrorLoading error={error} handlerRepeatRequest={fetchData} /> }
             {itemData && <section className="catalog-item">
                 <h2 className="text-center">{itemData.title}</h2>
                 <div className="row">

@@ -1,5 +1,6 @@
 const initStateCatalog = {
     filters: [{id: 0, title: 'Все'}],
+    loadingFilters: false,
     search: '',
     loading: false,
     error: null,
@@ -14,14 +15,18 @@ function serviceCatalog (state = initStateCatalog, action) {
             return {...state, search};
         case 'ADD_FILTERS': 
             const { newFilters } = action.payload;
-            return {...state, filters: [...state.filters, ...newFilters ] }
+            return {...state, filters: [...state.filters, ...newFilters ] };
+        case 'LOADING_FILTERS': 
+            return {...state, loadingFilters: true };
+        case 'SUCCESS_LOADING_FILTERS': 
+            return {...state, loadingFilters: false };
         case 'PREMISSION_BUTTON_ADD': 
             const { permissioLoading } = action.payload;
             return {...state, permissioLoading };
         case 'DISMISS_HEADER_SEARCH': 
             return {...state, headerSearching: false}
         case 'LOADING_CATALOG':
-            return {...state, loading: true };
+            return {...state, loading: true, error: null };
         case 'ERROR_LOADING_CATALOG':
             const { message } = action.payload;
             return {...state, loading: false, error: message};

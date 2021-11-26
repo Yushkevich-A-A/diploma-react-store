@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import FilterCatalog from './FilterCatalog/FilterCatalog';
-import Loader from '../../Components/Loader/Loader';
+import Loader from '../../Components/Loaders/Loader/Loader';
 import ItemList from '../../Components/ItemList/ItemList';
-import Button from '../../Components/Button/Button';
+import Button from '../../Components/Buttons/Button/Button';
 import './Catalog.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { dismissHeaderSearch, fetchCatalog, fetchFilters, resetFullCatalog, resetStateCatalogWithoutSearch } from '../../reduxFolder/actions/actionsCatalog/actionsCatalog';
 import CatalogSearch from './CatalogSearch/CatalogSearch';
+import ErrorLoading from '../../Components/ErrorLoading/ErrorLoading';
 
 function Catalog(props) {
     const { searching } = props;
-    const { loading, error, filters, search, permissioLoading } = useSelector( state => state.catalog );
+    const { loading, error, filters, loadingFilters, search, permissioLoading } = useSelector( state => state.catalog );
     const dispatch = useDispatch();
     const [ selectedFilter, setSelectedFilter ] = useState(0);
     const [ catalog, setCatalog ] = useState([]);
@@ -25,7 +26,7 @@ function Catalog(props) {
         if (searching) {
             dispatch(dismissHeaderSearch())
         }
-        dispatch(fetchFilters(globalAbortingController));
+        loadingFilter();
         return () => {
             globalAbortingController.abort();
             if (searching) {
@@ -39,27 +40,28 @@ function Catalog(props) {
 
     useEffect(() => {
         const abortingController = new AbortController();
-        const fetchParams = {
-            filter: selectedFilter,
-            offset: 0,
-            search: search,
+        loadingCatalog(0, (data) => setCatalog([...data]), abortingController);
+        return () => {
+            abortingController.abort();
+            setCatalog([])
         }
-        loadingCatalog(fetchParams, (data) => setCatalog([...data]), abortingController);
-        return () => abortingController.abort();
         // eslint-disable-next-line
     }, [selectedFilter, search]);
 
     const handleAddLoading = () => {
-        const fetchParams = {
-            filter: selectedFilter,
-            offset: catalog.length,
-            search: search,
-        }
-        loadingCatalog(fetchParams, (data) => setCatalog(prevState => ([...prevState, ...data])), globalAbortingController);
+        loadingCatalog(catalog.length, (data) => setCatalog(prevState => ([...prevState, ...data])), globalAbortingController);
     }
 
-    const loadingCatalog = (fetchParams, handler, aborting) => {
+    const loadingFilter = () => {
+        dispatch(fetchFilters(globalAbortingController,() => setTimeout(loadingFilter, 5 * 1000)));
+    }
 
+    const loadingCatalog = (offset, handler, aborting) => {
+        const fetchParams = {
+            filter: selectedFilter,
+            offset,
+            search: search,
+        }
         dispatch(fetchCatalog(fetchParams, (data) => {
             handler(data);
         }, aborting));
@@ -69,11 +71,15 @@ function Catalog(props) {
         <section className="catalog">
             <h2 className="text-center">Каталог</h2>
             { searching && <CatalogSearch /> }
-            <FilterCatalog filterList={filters} selectedFilter={selectedFilter} handleFilter={handleFilter}/>
-            { loading && <Loader /> }
-            { error && <p>{error}</p>  }  
+            <FilterCatalog filterList={filters} 
+                selectedFilter={selectedFilter} 
+                handleFilter={handleFilter}
+                loading={loadingFilters}/>
+            {/* { error && <p>{error}</p>  }   */}
             <ItemList list={catalog} />
             { permissioLoading && <Button name={'Загрузить еще'} handleClick={handleAddLoading} /> }
+            { loading && <Loader /> }
+            { error && <ErrorLoading error={error} handlerRepeatRequest={handleAddLoading} /> } 
         </section>
     )
 }

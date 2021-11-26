@@ -25,7 +25,7 @@ const randomNumber = (start, stop) => {
 const fortune = (ctx, body = null, status = 200) => {
     // Uncomment for delay
     const delay = randomNumber(1, 10) * 1000;
-    const delay = 0;
+    // const delay = 0;
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             // Uncomment for error generation
@@ -59,7 +59,6 @@ router.get('/api/categories', async (ctx, next) => {
 
 router.get('/api/items', async (ctx, next) => {
     const { query } = ctx.request;
-    console.log(query.q)
 
     const categoryId = query.categoryId === undefined ? 0 : Number(query.categoryId);
     const offset = query.offset === undefined ? 0 : Number(query.offset);
@@ -70,7 +69,6 @@ router.get('/api/items', async (ctx, next) => {
         .filter(o => o.title.toLowerCase().includes(q) || o.color.toLowerCase() === q)
         .slice(offset, offset + moreCount)
         .map(itemBasicMapper);
-    console.log(JSON.stringify(filtered))
     return fortune(ctx, filtered);
 });
 

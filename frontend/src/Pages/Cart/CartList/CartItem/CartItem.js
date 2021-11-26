@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import ButtonDelete from '../../../../Components/ButtonDelete/ButtonDelete';
+import ButtonDelete from '../../../../Components/Buttons/ButtonDelete/ButtonDelete';
 import { Link } from 'react-router-dom';
 import { numberWithSpaces } from '../../../../functions/numberWithSpaces';
 

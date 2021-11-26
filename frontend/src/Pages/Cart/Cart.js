@@ -3,10 +3,10 @@ import { Redirect } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import FormOrder from './FormOrder/FormOrder';
 import CartList from './CartList/CartList';
-import Loader from '../../Components/Loader/Loader'
+import Loader from '../../Components/Loaders/Loader/Loader';
 import { fetchDataToServer, removeItemFromCart, resetData } from '../../reduxFolder/actions/actionsCart/actionsCart';
 import CartTable from './CartTable/CartTable';
-
+import MessageSuccess from '../../Components/MessageSuccess/MessageSuccess';
 
 function Cart(props) {
     const { items, loading, error } = useSelector( state => state.manageCart );
@@ -37,6 +37,7 @@ function Cart(props) {
 
     return (
         <>
+            {success &&  <MessageSuccess />}
             <section className="cart">
                 <h2 className="text-center">Корзина</h2>
                 <CartTable items={items}>
@@ -44,9 +45,9 @@ function Cart(props) {
                 </CartTable>
             </section>
             {loading && <Loader />}
-            {success &&  console.log('показываем сообщение об успехе')}
+            
             {error && console.log(error)}
-            { items.length !== 0 && <FormOrder sentData={sentData}/>}
+            { items.length !== 0 && <FormOrder sentData={sentData} error={error}/>}
             {redirect && <Redirect to='/' />}
         </>
     )

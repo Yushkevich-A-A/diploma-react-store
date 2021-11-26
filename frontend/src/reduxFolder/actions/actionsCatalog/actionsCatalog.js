@@ -6,6 +6,14 @@ export const addFilters = (newFilters) => {
     return { type: 'ADD_FILTERS', payload: { newFilters } };
 }
 
+export const loadingFilters = () => {
+    return { type: 'LOADING_FILTERS' };
+}
+
+export const successLoadingFilters = () => {
+    return { type: 'SUCCESS_LOADING_FILTERS' };
+}
+
 export const permissionButtonAdd = (permissioLoading) => {
     return { type: 'PREMISSION_BUTTON_ADD', payload: { permissioLoading } };
 }
@@ -35,15 +43,17 @@ export const resetStateCatalogWithoutSearch = () => {
     return { type: 'RESET_STATE_CATALOG_WITHOUT_SEARCH' };
 }
 
-export const fetchFilters = (aborting) => async (dispatch, getState) => {
+export const fetchFilters = (aborting, handler) => async (dispatch, getState) => {
     try {
+        dispatch(loadingFilters())
         const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/categories`, {
             signal: aborting.signal,
         });
         const data = await response.json();
+        dispatch(successLoadingFilters())
         dispatch(addFilters(data));
     } catch (e) {
-        console.log(e.message);
+        handler()
     }
 }
 
@@ -65,6 +75,7 @@ export const fetchCatalog = (requestData, handler, aborting) => async (dispatch,
         const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/items?${urlRequest}`, {
             signal: aborting.signal,
         });
+        console.log(response.status)
         if (response.status < 200 || response.status >= 300) {
             throw new Error(response.statusText);
         }
@@ -75,7 +86,9 @@ export const fetchCatalog = (requestData, handler, aborting) => async (dispatch,
         }
         handler(data);
     } catch(e) {
-        console.log(e.message);
+        if (e.message === 'The user aborted a request.') {
+            return;
+        }
         dispatch(errorLoadingCatalog(e.message))
     }
 }

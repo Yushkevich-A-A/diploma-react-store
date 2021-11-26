@@ -1,0 +1,19 @@
+.error-button {
+    background-color: rgb(204, 204, 204);
+    border: none;
+    border-radius: 5px;
+    margin: 5px;
+    padding: 5px 10px;
+    color: rgb(46, 46, 46);
+    transition: background-color .2s,
+                color .2s ;
+}
+
+.error-button:focus {
+    outline: none;
+}
+
+.error-button:hover {
+    color: white;
+    background-color: rgb(4, 122, 0);
+}

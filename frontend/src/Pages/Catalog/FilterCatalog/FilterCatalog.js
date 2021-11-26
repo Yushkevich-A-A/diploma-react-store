@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './FilterCatalog.css';
+import FilterLoader from '../../../Components/Loaders/FilterLoader/FilterLoader';
 
 function FilterCatalog(props) {
-    const { selectedFilter, filterList, handleFilter } = props;
+    const {loading, selectedFilter, filterList, handleFilter } = props;
 
     return (
         <ul className="catalog-categories nav justify-content-center">
@@ -16,6 +17,7 @@ function FilterCatalog(props) {
                                                 }}>{item.title}</a>
                                         </li>)
             }
+            {loading && <FilterLoader />}
         </ul>
     )
 }
