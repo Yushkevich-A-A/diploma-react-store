@@ -8,8 +8,8 @@ import ButtonAddToCart from '../../Components/Buttons/ButtonAddToCart/ButtonAddT
 import ItemTable from './ItemTable/ItemTable';
 import CounterAmount from './CounterAmount/CounterAmount';
 import AvalibleSizes from './AvalibleSizes/AvalibleSizes';
-import { addItemToCart} from '../../reduxFolder/actions/actionsCart/actionsCart';
-import { fetchingItemData, resetStoreItem } from '../../reduxFolder/actions/actionsItem/actionsItem';
+import { addItemToCart} from '../../store/cart/actions';
+import { fetchingItemData, resetStoreItem } from '../../store/item/actions';
 import './ItemPage.css';
 import ErrorLoading from '../../Components/ErrorLoading/ErrorLoading';
 

@@ -1,11 +1,7 @@
 import { nanoid } from "nanoid";
 
-if (!localStorage.getItem('cart')) {
-    localStorage.setItem('cart', JSON.stringify([]));
-}
-
 const initStateCart = {
-    items: JSON.parse(localStorage.getItem('cart')),
+    items: JSON.parse(localStorage.getItem('cart')) || [],
     loading: false,
     error: null,
 }
@@ -21,10 +17,12 @@ function serviceManageCart ( state = initStateCart, action ) {
             } else {
                 newItems[indexExistOrder].count += userSelect.count;
             }
+            localStorage.setItem('cart', JSON.stringify(newItems));
             return {...state, items: newItems};
         case 'REMOVE_ITEM_FROM_CART': 
             const { orderId } = action.payload;
             const newItems1 = state.items.filter( item => item.orderId !== orderId);
+            localStorage.setItem('cart', JSON.stringify(newItems1));
             return {...state, items: newItems1};
         case 'SEND_DATA_TO_SERVER': 
             return {...state, loading: true, error: null};

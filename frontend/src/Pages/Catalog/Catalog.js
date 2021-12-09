@@ -6,7 +6,7 @@ import Loader from '../../Components/Loaders/Loader/Loader';
 import ItemList from '../../Components/ItemList/ItemList';
 import Button from '../../Components/Buttons/Button/Button';
 import './Catalog.css';
-import { dismissHeaderSearch, fetchCatalog, fetchFilters, resetFullCatalog, resetStateCatalogWithoutSearch } from '../../reduxFolder/actions/actionsCatalog/actionsCatalog';
+import { dismissHeaderSearch, fetchCatalog, fetchFilters, resetFullCatalog, resetStateCatalogWithoutSearch } from '../../store/catalog/actions';
 import CatalogSearch from './CatalogSearch/CatalogSearch';
 import ErrorLoading from '../../Components/ErrorLoading/ErrorLoading';
 import EmptySearch from '../../Components/EmptySearch/EmptySearch';

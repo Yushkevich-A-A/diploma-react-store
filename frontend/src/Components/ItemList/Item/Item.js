@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { numberWithSpaces } from '../../../functions/numberWithSpaces';
+import { numberWithSpaces } from '../../../libs/numberWithSpaces';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Button from '../../Buttons/Button/Button';

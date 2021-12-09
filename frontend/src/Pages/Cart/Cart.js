@@ -5,7 +5,7 @@ import { CSSTransition } from 'react-transition-group';
 import FormOrder from './FormOrder/FormOrder';
 import CartList from './CartList/CartList';
 import Loader from '../../Components/Loaders/Loader/Loader';
-import { fetchDataToServer, removeItemFromCart, resetData } from '../../reduxFolder/actions/actionsCart/actionsCart';
+import { fetchDataToServer, removeItemFromCart, resetData } from '../../store/cart/actions';
 import CartTable from './CartTable/CartTable';
 import MessageSuccess from '../../Components/MessageSuccess/MessageSuccess';
 import './Cart.css';

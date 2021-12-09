@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addSearchRequest } from '../../../reduxFolder/actions/actionsCatalog/actionsCatalog';
+import { addSearchRequest } from '../../../store/catalog/actions';
 import './CatalogSearch.css';
 
 function CatalogSearch(props) {

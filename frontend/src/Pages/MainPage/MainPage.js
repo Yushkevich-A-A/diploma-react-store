@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchTopSales, resetStoreTopSales } from '../../reduxFolder/actions/actionsTopSales/actionsTopSales';
+import { fetchTopSales, resetStoreTopSales } from '../../store/topSales/actions';
 import ErrorLoading from '../../Components/ErrorLoading/ErrorLoading';
 import ItemList from '../../Components/ItemList/ItemList';
 import Loader from '../../Components/Loaders/Loader/Loader';
 import TopSales from '../../Components/TopSales/TopSales';
 import Catalog from '../Catalog/Catalog';
 
-function MainPage() {
+function MainPage(props) {
+    console.log(props);
     const { loading, error } = useSelector( state => state.topSales );
     const dispatch = useDispatch();
     const [ topData, setTopData] = useState(null);

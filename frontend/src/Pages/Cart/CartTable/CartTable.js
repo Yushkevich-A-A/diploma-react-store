@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { numberWithSpaces } from '../../../functions/numberWithSpaces';
+import { numberWithSpaces } from '../../../libs/numberWithSpaces';
 
 function CartTable(props) {
     const { items } = props;

@@ -5,11 +5,7 @@ import './HeaderCart.css';
 
 function HeaderCart() {
     const { items } = useSelector( state => state.manageCart );
-
-    useEffect(() => {
-        localStorage.setItem('cart', JSON.stringify(items));
-    }, [items])
-
+    
     return (
         <Link to='/cart'>
             <div className="header-controls-pic header-controls-cart">
