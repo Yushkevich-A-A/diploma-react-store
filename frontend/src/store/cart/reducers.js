@@ -4,6 +4,7 @@ const initStateCart = {
     items: JSON.parse(localStorage.getItem('cart')) || [],
     loading: false,
     error: null,
+    successSending: false,
 }
 
 function serviceManageCart ( state = initStateCart, action ) {
@@ -30,7 +31,7 @@ function serviceManageCart ( state = initStateCart, action ) {
             const { message } = action.payload;
             return {...state, loading: false, error: message};
         case 'SUCCESS_SEND_DATA':
-            return {...state, loading: false, error: null};
+            return {...state, successSending: true, loading: false, error: null};
         case 'RESET_DATA':
             return {...initStateCart, items: []};
         default:

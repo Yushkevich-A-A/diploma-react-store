@@ -1,4 +1,5 @@
 const initStateItem = {
+    itemData: null,
     loading: false,
     error: null,
     avaliable: true,
@@ -14,7 +15,8 @@ function serviceLoadingItem ( state = initStateItem, action ) {
         case 'ITEM_AVALIABLE': 
             return {...state, avaliable: false};
         case 'SUCCESS_LOADING_ITEM': 
-            return {...state, loading: false, error: null};
+            const { itemData } = action.payload;
+            return {...state, itemData, loading: false, error: null};
         case 'RESET_STORE_ITEM': 
             return {...initStateItem};
         default:

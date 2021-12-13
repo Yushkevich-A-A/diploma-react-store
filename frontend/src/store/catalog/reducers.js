@@ -1,7 +1,8 @@
 const initStateCatalog = {
     filters: [{id: 0, title: 'Все'}],
+    errorFilter: false,
     loadingFilters: false,
-    search: '',
+    catalog: [],
     loading: false,
     error: null,
     permissioLoading: true,
@@ -10,16 +11,14 @@ const initStateCatalog = {
 
 function serviceCatalog (state = initStateCatalog, action) {
     switch (action.type) {
-        case 'ADD_SEARCH_REQUEST': 
-            const { search } = action.payload;
-            return {...state, search};
-        case 'ADD_FILTERS': 
-            const { newFilters } = action.payload;
-            return {...state, filters: [...state.filters, ...newFilters ] };
         case 'LOADING_FILTERS': 
             return {...state, loadingFilters: true };
         case 'SUCCESS_LOADING_FILTERS': 
-            return {...state, loadingFilters: false };
+            const { newFilters } = action.payload;
+            const filters = [...state.filters, ...newFilters ]
+            return {...state, filters, loadingFilters: false, errorFilter: false };
+        case 'ERROR_LOADING_FILTERS': 
+            return {...state, filters, loadingFilters: false, errorFilter: true };
         case 'PREMISSION_BUTTON_ADD': 
             const { permissioLoading } = action.payload;
             return {...state, permissioLoading };
@@ -31,10 +30,14 @@ function serviceCatalog (state = initStateCatalog, action) {
             const { message } = action.payload;
             return {...state, loading: false, error: message};
         case 'SUCCESS_LOADING_CATALOG':
-            return { ...state, loading: false, error: null };
-        case 'RESET_STATE_CATALOG_WITHOUT_SEARCH':
-            const searchReq = state.search;
-            return { ...initStateCatalog, search: searchReq };
+            const { catalog } = action.payload;
+            return { ...state, catalog, loading: false, error: null };
+        case 'SUCCESS_ADDITION_LOADING_CATALOG':
+            const { additionList } = action.payload;
+            const updatedCatalog = [...state.catalog, ...additionList];
+            return { ...state, catalog: [...updatedCatalog], loading: false, error: null };
+        case 'RESET_CATALOG':
+                return { ...state, catalog: [] };
         case 'RESET_FULL_STATE':
                 return { ...initStateCatalog };
         default:

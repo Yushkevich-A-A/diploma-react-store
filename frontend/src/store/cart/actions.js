@@ -1,3 +1,5 @@
+import { createOrder } from "../../libs/api";
+
 export const addItemToCart = (userSelect) => {
     return { type: 'ADD_ITEM_TO_CART', payload: {userSelect}};
 }
@@ -22,28 +24,17 @@ export const resetData = () => {
     return { type: 'RESET_DATA'};
 }
 
-export const fetchDataToServer = (form, handler, aborting) => async (dispatch, getState) => {
+export const fetchDataToServer = (form) => async (dispatch, getState) => {
     try {
         dispatch(sendDataToServer());
         const itemsToServer = getState().manageCart.items.map( item => { return {id: item.id, count: item.count, price: item.price} });
-        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/order`, {
-                method: 'POST',
-                body: JSON.stringify({
-                    owner: form,
-                    items: itemsToServer,
-                }),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                signal: aborting.signal
-            })
-        if (response.status < 200 || response.status >= 300) {
-            throw new Error(response.statusText)
-        }
+        const requestObj = {
+            owner: form,
+            items: itemsToServer,
+        };
+        await createOrder(requestObj);
         dispatch(successSendData());
-        handler();
     } catch (e) {
-        console.log(e.message)
         dispatch(errorSendData(e.message))
     }
 }

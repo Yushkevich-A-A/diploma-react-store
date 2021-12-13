@@ -29,10 +29,10 @@ const fortune = (ctx, body = null, status = 200) => {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             // Uncomment for error generation
-            // if (Math.random() > 0.8) {
-            //     reject(new Error('Something bad happened'));
-            //     return;
-            // }
+            if (Math.random() > 0.1) {
+                reject(new Error('Something bad happened'));
+                return;
+            }
 
             ctx.response.status = status;
             ctx.response.body = body;
@@ -69,6 +69,7 @@ router.get('/api/items', async (ctx, next) => {
         .filter(o => o.title.toLowerCase().includes(q) || o.color.toLowerCase() === q)
         .slice(offset, offset + moreCount)
         .map(itemBasicMapper);
+
     return fortune(ctx, filtered);
 });
 
@@ -84,7 +85,6 @@ router.get('/api/items/:id', async (ctx, next) => {
 
 router.post('/api/order', async (ctx, next) => {
     const { owner: { phone, address }, items } = ctx.request.body;
-
     if (typeof phone !== 'string') {
         return fortune(ctx, 'Bad Request: Phone', 400);
     }
@@ -105,7 +105,6 @@ router.post('/api/order', async (ctx, next) => {
             return false;
         }
         return true;
-        
     })) {
         return fortune(ctx, 'Bad Request', 400);
     }

@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { addSearchRequest } from '../../../store/catalog/actions';
+import React, { useEffect, useState } from 'react';
 import './CatalogSearch.css';
 
 function CatalogSearch(props) {
-    const { search } = useSelector( state => state.catalog );
-    const dispatch = useDispatch();
-    const [ searchValue, setSearchValue ] = useState(search);
+    const { search, handleSearchValue } = props;
+    const [ searchValue, setSearchValue ] = useState('');
+
+    useEffect(() => {
+        setSearchValue(search || '');
+        // eslint-disable-next-line
+    }, [search])
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(addSearchRequest(searchValue));
+        handleSearchValue(searchValue);
     }
 
     const handleChange = (e) => {

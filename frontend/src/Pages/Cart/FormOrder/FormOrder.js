@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 function FormOrder(props) {
-    const { sentData, error } = props;
+    const { sendData, error } = props;
 
     const [ form, setForm ] = useState({phone: '', address: '', agreement: false})
 
@@ -14,7 +14,7 @@ function FormOrder(props) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        sentData({...form})
+        sendData({...form})
     }
 
     return (
@@ -54,7 +54,7 @@ function FormOrder(props) {
 }
 
 FormOrder.propTypes = {
-    sentData: PropTypes.func.isRequired,
+    sendData: PropTypes.func.isRequired,
 }
 
 export default FormOrder

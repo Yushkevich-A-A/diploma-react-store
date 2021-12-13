@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../../Components/Loaders/Loader/Loader';
 import noPhoto from '../../assets/no_photo/no_photo.png';
@@ -10,33 +10,36 @@ import CounterAmount from './CounterAmount/CounterAmount';
 import AvalibleSizes from './AvalibleSizes/AvalibleSizes';
 import { addItemToCart} from '../../store/cart/actions';
 import { fetchingItemData, resetStoreItem } from '../../store/item/actions';
-import './ItemPage.css';
 import ErrorLoading from '../../Components/ErrorLoading/ErrorLoading';
+import './ItemPage.css';
 
 function ItemPage(props) {
     const { match } = props;
-    const { loading, error, avaliable } = useSelector( store => store.loadingItem )
+    const { loading, error, avaliable, itemData } = useSelector( store => store.loadingItem );
     const dispatch = useDispatch();
-    const [ itemData, setItemData ] = useState(null);
+    const history = useHistory()
     const [ userSelect,  setUserSelect ] = useState({count: 1, size: null, id: null, price: null, title: null});
-    const [ isRedirect, setRedirect ] = useState(false);
-    const abortingController = new AbortController();
+    const abortingController = new AbortController()
 
     useEffect(() => {
         fetchData();
         return () => {
-            abortingController.abort();
+            abortingController.abort()
             dispatch(resetStoreItem());
         }
         // eslint-disable-next-line
     }, []);
 
-    const fetchData = () => {
-        dispatch( fetchingItemData(match.params.id, (data) => {
-            const { id, price, title } = data;
+    useEffect(() => {
+        if (itemData) {
+            const { id, price, title } = itemData;
             setUserSelect(prevState => ({...prevState, id, price, title}))
-            setItemData(data);
-        }, abortingController) )
+        }
+        // eslint-disable-next-line
+    }, [itemData]);
+
+    const fetchData = () => {
+        dispatch( fetchingItemData(match.params.id, abortingController) );
     }
 
     const handleSelectSize = (size) => {
@@ -49,13 +52,13 @@ function ItemPage(props) {
 
     const handleAddToCart = () => {
         dispatch(addItemToCart(userSelect))
-        setRedirect(true);
+        history.push('/cart');
     }
  
     return (
         <>
             {loading && <Loader />}
-            { error && <ErrorLoading error={error} handlerRepeatRequest={fetchData} /> }
+            {error && <ErrorLoading error={error} handlerRepeatRequest={fetchData} /> }
             {itemData && <section className="catalog-item">
                 <h2 className="text-center">{itemData.title}</h2>
                 <div className="row">
@@ -72,7 +75,6 @@ function ItemPage(props) {
                        {avaliable && userSelect.size && <ButtonAddToCart handleClick={handleAddToCart}/>}
                     </div>
                 </div>
-                {isRedirect && <Redirect to='/cart'/>}
             </section>}
         </>
     )

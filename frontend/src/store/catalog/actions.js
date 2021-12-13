@@ -1,17 +1,19 @@
-export const addSearchRequest = (search) => {
-    return { type: 'ADD_SEARCH_REQUEST', payload: { search } };
-}
+import {createFetchFilters, createFetchCatalog, fetchToServer} from '../../libs/api';
 
-export const addFilters = (newFilters) => {
-    return { type: 'ADD_FILTERS', payload: { newFilters } };
-}
+// export const addSearchRequest = (search) => {
+//     return { type: 'ADD_SEARCH_REQUEST', payload: { search } };
+// }
 
 export const loadingFilters = () => {
     return { type: 'LOADING_FILTERS' };
 }
 
-export const successLoadingFilters = () => {
-    return { type: 'SUCCESS_LOADING_FILTERS' };
+export const successLoadingFilters = (newFilters) => {
+    return { type: 'SUCCESS_LOADING_FILTERS', payload: { newFilters } };
+}
+
+export const errorLoadingFilters = () => {
+    return { type: 'ERROR_LOADING_FILTERS'};
 }
 
 export const permissionButtonAdd = (permissioLoading) => {
@@ -30,61 +32,63 @@ export const errorLoadingCatalog = (message) => {
     return { type: 'ERROR_LOADING_CATALOG', payload: { message } };
 }
 
-export const successLoadingCatalog = () => {
-    return { type: 'SUCCESS_LOADING_CATALOG' };
+export const successLoadingCatalog = (catalog) => {
+    return { type: 'SUCCESS_LOADING_CATALOG', payload: {catalog} };
+}
+
+export const successAdditionLoadingCatalog = (additionList) => {
+    return { type: 'SUCCESS_ADDITION_LOADING_CATALOG', payload: {additionList}};
 }
 
 export const resetFullCatalog = () => {
-    console.log('сброс каталога')
     return { type: 'RESET_FULL_STATE' };
 }
 
-export const resetStateCatalogWithoutSearch = () => {
-    return { type: 'RESET_STATE_CATALOG_WITHOUT_SEARCH' };
+export const resetCatalog = () => {
+    return { type: 'RESET_CATALOG' };
 }
 
-export const fetchFilters = (aborting, handler) => async (dispatch, getState) => {
+export const fetchFilters = (aborting) => async (dispatch, getState) => {
     try {
         dispatch(loadingFilters())
-        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/categories`, {
-            signal: aborting.signal,
-        });
-        const data = await response.json();
-        dispatch(successLoadingFilters())
-        dispatch(addFilters(data));
+        console.log(aborting);
+        const data = await fetchToServer(`/api/categories`, aborting);
+        dispatch(successLoadingFilters(data))
     } catch (e) {
-        handler()
+        setTimeout(() => {
+            dispatch(fetchFilters(aborting));
+            console.log('повторный запрос');
+        }, 1000 * 5);
     }
 }
 
-export const fetchCatalog = (requestData, handler, aborting) => async (dispatch, getState) => {
+export const fetchCatalog = (urlRequest, aborting) => async (dispatch, getState) => {
     try {
         dispatch(permissionButtonAdd(false));
-        const {filter, offset, search} = requestData;
+        dispatch( resetCatalog() );
         dispatch( loadingCatalog() );
-        const urlRequest = new URLSearchParams();
-        if ( filter !== 0) {
-            urlRequest.append('categoryId', filter);
-        }
-        if ( offset !== 0) {
-            urlRequest.append('offset', offset);
-        }
-        if ( search !== '') {
-            urlRequest.append('q', search);
-        }
-        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/items?${urlRequest}`, {
-            signal: aborting.signal,
-        });
-        console.log(response.status)
-        if (response.status < 200 || response.status >= 300) {
-            throw new Error(response.statusText);
-        }
-        const data = await response.json();
-        dispatch(successLoadingCatalog());
+        const data = await fetchToServer(`/api/items${urlRequest}`, aborting);
         if (data.length >= 6) {
             dispatch(permissionButtonAdd(true));
         }
-        handler(data);
+        dispatch(successLoadingCatalog(data));
+    } catch(e) {
+        if (e.message === 'The user aborted a request.') {
+            return;
+        }
+        dispatch(errorLoadingCatalog(e.message))
+    }
+}
+
+export const fetchAddingCatalog = (urlRequest, aborting) => async (dispatch, getState) => {
+    try {
+        dispatch(permissionButtonAdd(false));
+        dispatch( loadingCatalog());
+        const data = await fetchToServer(`/api/items${urlRequest}`, aborting);
+        if (data.length >= 6) {
+            dispatch(permissionButtonAdd(true));
+        }
+        dispatch(successAdditionLoadingCatalog(data));
     } catch(e) {
         if (e.message === 'The user aborted a request.') {
             return;

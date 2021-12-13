@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import { addSearchRequest } from '../../../../store/catalog/actions';
 import './HeaderControlsPics.css';
 
 function HeaderControlsPics(props) {
+    const history = useHistory()
     const { headerSearching } = useSelector( state => state.catalog);
     const dispatch = useDispatch();
-    const [ redirect, setRedirect ] = useState(false);
     const [ visiableSearch, setVisiableSearch ] = useState(false);
     const [ value, setValue ] = useState('');
 
@@ -28,9 +28,9 @@ function HeaderControlsPics(props) {
         }
         setVisiableSearch(prevState => !prevState);
         if ( value.trim() !== '' ) {
-            dispatch(addSearchRequest(value))
+            // dispatch(addSearchRequest(value))
             setValue('');
-            setRedirect(true);
+            history.push(`/catalog?q=${value}`)
         }
     }
 
@@ -39,23 +39,21 @@ function HeaderControlsPics(props) {
         if ( value.trim() === '' ) {
             return;
         }
-        dispatch(addSearchRequest(value))
+        // dispatch(addSearchRequest(value))
         setVisiableSearch(false);
         setValue('');
-        setRedirect(true);
+        history.push(`/catalog?q=${value}`)
     }
 
     return (
         <div>
             <div className="header-controls-pics">
                 <div data-id="search-expander" className="header-controls-pic header-controls-search" onClick={handleClick}></div>
-                {/* { Do programmatic navigation on click to /cart.html } */}
                 {props.children}
             </div>
             <form className={`header-controls-search-form form-inline${!visiableSearch && ' invisible'}`} onSubmit={handleSubmit} >
                 <input className="form-control" placeholder="Поиск" value={value} onChange={handleChange}/>
             </form>
-            {redirect && <Redirect to='/catalog' />}
         </div>
     )
 }

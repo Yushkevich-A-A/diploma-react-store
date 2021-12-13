@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { numberWithSpaces } from '../../../libs/numberWithSpaces';
-import { Redirect } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Button from '../../Buttons/Button/Button';
 import noPhoto from '../../../assets/no_photo/no_photo.png';
@@ -8,10 +8,10 @@ import './Item.css';
 
 function Item(props) {
     const { item } = props;
-    const [ redirect, setRedirect ] = useState(false);
+    const history = useHistory();
 
     const handleClick = () => {
-        setRedirect(item.id)
+        history.push(`/catalog/${item.id}`)
     }
 
     return (
@@ -31,7 +31,6 @@ function Item(props) {
                     <Button handleClick={handleClick} name={'Заказать'} />
                 </div>
             </div>
-            {redirect && <Redirect to={`/catalog/${item.id}`} />}
         </div>
     )
 }

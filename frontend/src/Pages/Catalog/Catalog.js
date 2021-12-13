@@ -1,94 +1,86 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import qs from 'qs';
 import { useDispatch, useSelector } from 'react-redux';
 import FilterCatalog from './FilterCatalog/FilterCatalog';
 import Loader from '../../Components/Loaders/Loader/Loader';
 import ItemList from '../../Components/ItemList/ItemList';
 import Button from '../../Components/Buttons/Button/Button';
-import './Catalog.css';
-import { dismissHeaderSearch, fetchCatalog, fetchFilters, resetFullCatalog, resetStateCatalogWithoutSearch } from '../../store/catalog/actions';
+import { dismissHeaderSearch, fetchAddingCatalog, fetchCatalog, fetchFilters, resetFullCatalog } from '../../store/catalog/actions';
 import CatalogSearch from './CatalogSearch/CatalogSearch';
 import ErrorLoading from '../../Components/ErrorLoading/ErrorLoading';
 import EmptySearch from '../../Components/EmptySearch/EmptySearch';
+import './Catalog.css';
+import { useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 
 function Catalog(props) {
     const { searching } = props;
-    const { loading, error, filters, loadingFilters, search, permissioLoading } = useSelector( state => state.catalog );
+    const match = useRouteMatch();
+    const history = useHistory();
+    const location = useLocation();
+    const { loading, error, filters, catalog, loadingFilters, permissioLoading } = useSelector( state => state.catalog );
     const dispatch = useDispatch();
-    const [ selectedFilter, setSelectedFilter ] = useState(0);
-    const [ catalog, setCatalog ] = useState([]);
-    const [ isEmptySearch, setEmptySearch ] = useState(false)
+    const [ selectedParametres, setSelectedParametres ] = useState({ categoryId: 0, q: null});
+    const [ aborting, setAbortingController ] = useState({abortingController: new AbortController()});
     const globalAbortingController = new AbortController();
 
     const handleFilter = (id) => {
-        setSelectedFilter(filters.find( item => item.id === id ).id)
+        setSelectedParametres(prevState => ({...prevState, categoryId: id }));
+    }
+
+    const handleSearchValue = (value) => {
+        setSelectedParametres(prevState => ({...prevState, q: value || null }));
     }
 
     useEffect(() => {
         if (searching) {
             dispatch(dismissHeaderSearch())
         }
-        loadingFilter();
+        dispatch(fetchFilters(globalAbortingController));
+
+        const initSelectedValue = qs.parse( location.search, { ignoreQueryPrefix: true} );
+        setSelectedParametres(prevState => ({
+            ...prevState, 
+            categoryId: +initSelectedValue.categoryId || 0,
+            q: initSelectedValue.q || null,
+        }))
+
+        dispatch(fetchCatalog(location.search, globalAbortingController));
+
         return () => {
+            dispatch(resetFullCatalog());
             globalAbortingController.abort();
-            if (searching) {
-                dispatch(resetFullCatalog());
-                return;
-            }
-            dispatch(resetStateCatalogWithoutSearch());
         }
         // eslint-disable-next-line
     }, []);
 
     useEffect(() => {
         const abortingController = new AbortController();
-        setEmptySearch(false);
-        loadingCatalog(0, (data) => {
-            if (data.length === 0) {
-                setEmptySearch(true);
-            }
-            setCatalog([...data])
-        }, abortingController);
-        return () => {
-            abortingController.abort();
-            setCatalog([]);
-        }
+        aborting.abortingController.abort();
+        const urlReq = qs.stringify(selectedParametres, { addQueryPrefix: true, skipNulls: true });
+        history.push(`${match.url}${urlReq}`);
+        dispatch(fetchCatalog(urlReq, abortingController));
+        return () => abortingController.abort();
         // eslint-disable-next-line
-    }, [selectedFilter, search]);
+    }, [selectedParametres]);
 
     const handleAddLoading = () => {
-        setEmptySearch(false);
-        loadingCatalog(catalog.length, (data) => {
-            if (data.length === 0 && catalog.length === 0) {
-                setEmptySearch(true);
-            }
-            setCatalog(prevState => ([...prevState, ...data]))
-        }, globalAbortingController);
-    }
-
-    const loadingFilter = () => {
-        dispatch(fetchFilters(globalAbortingController,() => setTimeout(loadingFilter, 5 * 1000)));
-    }
-
-    const loadingCatalog = (offset, handler, aborting) => {
-        const fetchParams = {
-            filter: selectedFilter,
-            offset,
-            search: search,
-        }
-        dispatch(fetchCatalog(fetchParams, (data) => handler(data), aborting));
+        const abortingController = new AbortController()
+        setAbortingController(prevState => ({...prevState, abortingController }));
+        const request = qs.stringify({...selectedParametres, offset: catalog.length}, { addQueryPrefix: true, skipNulls: true });
+        dispatch(fetchAddingCatalog(request, abortingController));
     }
 
     return (
         <section className="catalog">
             <h2 className="text-center">Каталог</h2>
-            { searching && <CatalogSearch /> }
+            { searching && <CatalogSearch search={selectedParametres.q} handleSearchValue={handleSearchValue}/> }
             <FilterCatalog filterList={filters} 
-                selectedFilter={selectedFilter} 
+                selectedFilter={selectedParametres.categoryId} 
                 handleFilter={handleFilter}
                 loading={loadingFilters}/>
             <ItemList list={catalog} />
-            { searching && isEmptySearch && <EmptySearch />}
+            { !loading && !error && catalog.length === 0 && <EmptySearch />}
             { permissioLoading && <Button name={'Загрузить еще'} handleClick={handleAddLoading} /> }
             { loading && <Loader /> }
             { error && <ErrorLoading error={error} handlerRepeatRequest={handleAddLoading} /> } 

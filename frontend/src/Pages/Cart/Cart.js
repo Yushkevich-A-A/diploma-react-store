@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Redirect } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { CSSTransition } from 'react-transition-group';
 import FormOrder from './FormOrder/FormOrder';
@@ -11,31 +11,28 @@ import MessageSuccess from '../../Components/MessageSuccess/MessageSuccess';
 import './Cart.css';
 
 function Cart(props) {
-    const { items, loading, error } = useSelector( state => state.manageCart );
+    const { items, loading, error, successSending } = useSelector( state => state.manageCart );
     const dispatch = useDispatch();
-    const [ redirect, setRedirect ] = useState(false);
+    const history = useHistory()
     const [ success, setSuccess ] = useState(false);
-
-    const abortingController = new AbortController();
-
-    useEffect(() => {
-        return () => { abortingController.abort() };
-        // eslint-disable-next-line
-    }, [])
 
     const handleDeleteOrder = (id) => {
         dispatch(removeItemFromCart(id))
     }
 
-    const sentData = (formData) => {
-        dispatch(fetchDataToServer(formData, () => {
+    useEffect(() => {
+        if (successSending) {
             setSuccess(true);
             dispatch(resetData());
             setTimeout(() => {
-                dispatch(resetData());
-                setRedirect(true);
+                history.push('/')
             }, 5000)
-        } , abortingController));
+        }
+    }, [successSending])
+
+    
+    const sendData = (formData) => {
+        dispatch(fetchDataToServer(formData));
     }
 
     return (
@@ -54,8 +51,7 @@ function Cart(props) {
             {loading && <Loader />}
             
             {error && console.log(error)}
-            { items.length !== 0 && <FormOrder sentData={sentData} error={error}/>}
-            {redirect && <Redirect to='/' />}
+            { items.length !== 0 && <FormOrder sendData={sendData} error={error}/>}
         </>
     )
 }

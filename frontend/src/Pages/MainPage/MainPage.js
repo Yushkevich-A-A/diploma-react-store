@@ -9,9 +9,8 @@ import Catalog from '../Catalog/Catalog';
 
 function MainPage(props) {
     console.log(props);
-    const { loading, error } = useSelector( state => state.topSales );
+    const { loading, error, topSalesData } = useSelector( state => state.topSales );
     const dispatch = useDispatch();
-    const [ topData, setTopData] = useState(null);
     const abortingController = new AbortController();
 
     useEffect(() => {
@@ -24,9 +23,7 @@ function MainPage(props) {
     }, []);
 
     const handleFetchRequest = () => {
-        dispatch(fetchTopSales((data) => {
-            setTopData(data);
-        }, abortingController));
+        dispatch(fetchTopSales(abortingController));
     }
 
     return (
@@ -34,7 +31,7 @@ function MainPage(props) {
             <TopSales title={'Хиты продаж!'}>
                 { loading && <Loader /> }
                 { error && <ErrorLoading error={error} handlerRepeatRequest={handleFetchRequest} /> }
-                { topData && <ItemList list={topData} />}
+                { topSalesData && <ItemList list={topSalesData} />}
             </TopSales>
             <Catalog searching={false}/>
         </>
