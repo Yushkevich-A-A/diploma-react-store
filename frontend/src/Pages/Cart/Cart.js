@@ -10,7 +10,7 @@ import CartTable from './CartTable/CartTable';
 import MessageSuccess from '../../Components/MessageSuccess/MessageSuccess';
 import './Cart.css';
 
-function Cart(props) {
+function Cart() {
     const { items, loading, error, successSending } = useSelector( state => state.manageCart );
     const dispatch = useDispatch();
     const history = useHistory()
@@ -28,6 +28,7 @@ function Cart(props) {
                 history.push('/')
             }, 5000)
         }
+        // eslint-disable-next-line
     }, [successSending])
 
     

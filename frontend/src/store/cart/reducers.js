@@ -31,6 +31,7 @@ function serviceManageCart ( state = initStateCart, action ) {
             const { message } = action.payload;
             return {...state, loading: false, error: message};
         case 'SUCCESS_SEND_DATA':
+            localStorage.setItem('cart', JSON.stringify([]));
             return {...state, successSending: true, loading: false, error: null};
         case 'RESET_DATA':
             return {...initStateCart, items: []};

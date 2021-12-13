@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Redirect, useHistory } from 'react-router-dom';
-import { addSearchRequest } from '../../../../store/catalog/actions';
+import qs from 'qs';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import './HeaderControlsPics.css';
 
 function HeaderControlsPics(props) {
     const history = useHistory()
     const { headerSearching } = useSelector( state => state.catalog);
-    const dispatch = useDispatch();
     const [ visiableSearch, setVisiableSearch ] = useState(false);
     const [ value, setValue ] = useState('');
 
@@ -28,9 +27,8 @@ function HeaderControlsPics(props) {
         }
         setVisiableSearch(prevState => !prevState);
         if ( value.trim() !== '' ) {
-            // dispatch(addSearchRequest(value))
             setValue('');
-            history.push(`/catalog?q=${value}`)
+            history.push(`/catalog${qs.stringify({ q: value }, { addQueryPrefix: true, skipNulls: true })}`)
         }
     }
 
@@ -39,10 +37,9 @@ function HeaderControlsPics(props) {
         if ( value.trim() === '' ) {
             return;
         }
-        // dispatch(addSearchRequest(value))
         setVisiableSearch(false);
         setValue('');
-        history.push(`/catalog?q=${value}`)
+        history.push(`/catalog${qs.stringify({ q: value }, { addQueryPrefix: true, skipNulls: true })}`);
     }
 
     return (

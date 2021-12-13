@@ -1,4 +1,4 @@
-import {createFetchFilters, createFetchCatalog, fetchToServer} from '../../libs/api';
+import { fetchToServer } from '../../libs/api';
 
 // export const addSearchRequest = (search) => {
 //     return { type: 'ADD_SEARCH_REQUEST', payload: { search } };
@@ -51,13 +51,11 @@ export const resetCatalog = () => {
 export const fetchFilters = (aborting) => async (dispatch, getState) => {
     try {
         dispatch(loadingFilters())
-        console.log(aborting);
         const data = await fetchToServer(`/api/categories`, aborting);
         dispatch(successLoadingFilters(data))
     } catch (e) {
         setTimeout(() => {
             dispatch(fetchFilters(aborting));
-            console.log('повторный запрос');
         }, 1000 * 5);
     }
 }

@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import './ErrorButton.css';
 
 function ErrorButton(props) {
@@ -10,10 +9,6 @@ function ErrorButton(props) {
         </button>
     )
 }
-
-ErrorButton.propTypes = {
-
-};
 
 export default ErrorButton;
 

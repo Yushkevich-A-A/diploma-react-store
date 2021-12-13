@@ -1,14 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import './MessageSuccess.css';
 
-function MessageSuccess(props) {
-    // const [ show, setOpacity ] = useState(false);
-
-    // useEffect(() => {
-    //     setOpacity(true);
-    // },)
-
+function MessageSuccess() {
     return (
            <div className='message-wrapper'>
                 <div className="message-success">
@@ -18,10 +11,6 @@ function MessageSuccess(props) {
         
     )
 }
-
-MessageSuccess.propTypes = {
-
-};
 
 export default MessageSuccess;
 

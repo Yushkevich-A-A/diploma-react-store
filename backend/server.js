@@ -29,7 +29,7 @@ const fortune = (ctx, body = null, status = 200) => {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             // Uncomment for error generation
-            if (Math.random() > 0.1) {
+            if (Math.random() > 0.8) {
                 reject(new Error('Something bad happened'));
                 return;
             }

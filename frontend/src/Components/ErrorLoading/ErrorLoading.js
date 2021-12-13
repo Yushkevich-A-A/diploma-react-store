@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import './ErrorLoading.css';
 import ErrorButton from './ErrorButton/ErrorButton';
 
@@ -15,10 +14,6 @@ function ErrorLoading(props) {
 
     )
 }
-
-ErrorLoading.propTypes = {
-
-};
 
 export default ErrorLoading;
 
